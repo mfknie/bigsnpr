@@ -69,7 +69,7 @@ snp_clumping <- function(G, infos.chr,
                          exclude = NULL,
                          ncores = 1) {
 
-  check_args()
+  check_args(G = "assert_class(G, 'FBM')")
 
   if (!missing(is.size.in.bp))
     warning2("Parameter 'is.size.in.bp' is deprecated.")
