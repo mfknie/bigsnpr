@@ -86,7 +86,7 @@ void clumping_chr0(Environment BM2,
       keep[j0] = keep_j0;  // can now be used by other threads
     }
   }
-
+}
 void clumping_chr(Environment BM,
                   Environment BM2,
                   const IntegerVector& rowInd,
