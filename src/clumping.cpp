@@ -104,7 +104,7 @@ void clumping_chr(Environment BM,
   if (BM.exists("code256")) {
     NumericVector code = clone(as<NumericVector>(BM["code256"]));
     // code[is_na(code)] = 3;
-    SubBMCode256Acc macc(xpBM, rowInd, colInd, 1);
+    SubBMCode256Acc macc(xpBM, rowInd, colInd, code, 1);
     return clumping_chr0(BM2, macc, rowInd, colInd, ordInd, rankInd, pos, sumX, denoX, size, thr, ncores);
   } else {
     switch(xpBM->matrix_type()) {

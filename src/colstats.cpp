@@ -4,14 +4,15 @@
 
 /******************************************************************************/
 
-// [[Rcpp::export]]
-ListOf<NumericVector> snp_colstats(Environment BM,
+//Stats matrix on float FBM
+template <class C>
+ListOf<NumericVector> snp_colstats0(C macc,
                                    const IntegerVector& rowInd,
                                    const IntegerVector& colInd,
                                    int ncores) {
 
-  XPtr<FBM> xpBM = BM["address"];
-  SubBMCode256Acc macc(xpBM, rowInd, colInd, BM["code256"], 1);
+  //XPtr<FBM> xpBM = BM["address"];
+  //SubBMCode256Acc macc(xpBM, rowInd, colInd, BM["code256"], 1);
 
   size_t n = macc.nrow();
   size_t m = macc.ncol();
@@ -32,6 +33,32 @@ ListOf<NumericVector> snp_colstats(Environment BM,
 
   return List::create(_["sumX"]  = sumX,
                       _["denoX"] = denoX);
+}
+
+
+// [[Rcpp::export]]
+ListOf<NumericVector> snp_colstats(Environment BM,
+                                   const IntegerVector& rowInd,
+                                   const IntegerVector& colInd,
+                                   int ncores) {
+
+  XPtr<FBM> xpBM = BM["address"];
+  if (BM.exists("code256")) {
+    SubBMCode256Acc macc(xpBM, rowInd, colInd, BM["code256"], 1);
+    return snp_colstats0(macc, rowInd, colInd, ncores)
+  } else {
+    switch(xpBM->matrix_type()) {
+    case 6:
+    {
+      SubBMAcc<float> macc(xpBM, rowInd, colInd, 1);
+      return snp_colstats0(macc, rowInd, colInd, ncores);
+    }
+    default:
+      throw Rcpp::exception(ERROR_TYPE);
+    }
+  }
+  
+
 }
 
 /******************************************************************************/
