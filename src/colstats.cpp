@@ -16,7 +16,8 @@ ListOf<NumericVector> snp_colstats0(C macc,
 
   size_t n = macc.nrow();
   size_t m = macc.ncol();
-
+  Rcout << "nrow: " << n << "\n";
+  Rcout << "ncol: " << m << "\n";
   NumericVector sumX(m), denoX(m);
 
   #pragma omp parallel for num_threads(ncores)
@@ -47,15 +48,15 @@ ListOf<NumericVector> snp_colstats(Environment BM,
     SubBMCode256Acc macc(xpBM, rowInd, colInd, BM["code256"], 1);
     return snp_colstats0(macc, rowInd, colInd, ncores);
   } else {
-    // switch(xpBM->matrix_type()) {
-    // case 6:
-    // {
+    switch(xpBM->matrix_type()) {
+    case 6:
+    {
       SubBMAcc<float> macc(xpBM, rowInd, colInd, 1);
       return snp_colstats0(macc, rowInd, colInd, ncores);
-    // }
-    // default:
-    //   throw Rcpp::exception(ERROR_TYPE);
-    // }
+    }
+    default:
+      throw Rcpp::exception(ERROR_TYPE);
+    }
   }
   
 
