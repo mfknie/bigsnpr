@@ -14,6 +14,7 @@ ListOf<NumericVector> snp_colstats0(C macc,
   //XPtr<FBM> xpBM = BM["address"];
   //SubBMCode256Acc macc(xpBM, rowInd, colInd, BM["code256"], 1);
 
+  Rcout << "Start function:" << "\n";
   size_t n = macc.nrow();
   size_t m = macc.ncol();
   Rcout << "nrow: " << n << "\n";
