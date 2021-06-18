@@ -5,6 +5,7 @@
 /******************************************************************************/
 
 //Stats matrix on float FBM
+// [[Rcpp::export]]
 template <class C>
 ListOf<NumericVector> snp_colstats0(C macc,
                                    const IntegerVector& rowInd,
