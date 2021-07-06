@@ -1,11 +1,11 @@
 /******************************************************************************/
 
 #include <bigstatsr/BMCodeAcc.h>
+#include <bigstatsr/BMAcc.h>
 
 /******************************************************************************/
 
 //Stats matrix on float FBM
-// [[Rcpp::export]]
 template <class C>
 ListOf<NumericVector> snp_colstats0(C macc,
                                    const IntegerVector& rowInd,
@@ -14,12 +14,8 @@ ListOf<NumericVector> snp_colstats0(C macc,
 
   //XPtr<FBM> xpBM = BM["address"];
   //SubBMCode256Acc macc(xpBM, rowInd, colInd, BM["code256"], 1);
-
-  Rcout << "Start function:" << "\n";
   size_t n = macc.nrow();
   size_t m = macc.ncol();
-  Rcout << "nrow: " << n << "\n";
-  Rcout << "ncol: " << m << "\n";
   NumericVector sumX(m), denoX(m);
 
   #pragma omp parallel for num_threads(ncores)
@@ -51,17 +47,16 @@ ListOf<NumericVector> snp_colstats(Environment BM,
     return snp_colstats0(macc, rowInd, colInd, ncores);
   } else {
     switch(xpBM->matrix_type()) {
-    case 6:
-    {
-      SubBMAcc<float> macc(xpBM, rowInd, colInd, 1);
-      return snp_colstats0(macc, rowInd, colInd, ncores);
-    }
-    default:
-      throw Rcpp::exception(ERROR_TYPE);
-    }
+      case 6:
+      {
+        // Rcout << "colInd: " << colInd << "\n";
+        SubBMAcc<float> macc(xpBM, rowInd, colInd, 1);
+        return snp_colstats0(macc, rowInd, colInd, ncores);
+      }
+      default:
+        throw Rcpp::exception(ERROR_TYPE);
+      }
   }
-  
-
 }
 
 /******************************************************************************/

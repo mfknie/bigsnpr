@@ -1,6 +1,7 @@
 /******************************************************************************/
 
 #include <bigstatsr/BMCodeAcc.h>
+#include <bigstatsr/BMAcc.h>
 #include "clumping-utils.h"
 
 /******************************************************************************/
@@ -108,14 +109,14 @@ void clumping_chr(Environment BM,
     return clumping_chr0(BM2, macc, rowInd, colInd, ordInd, rankInd, pos, sumX, denoX, size, thr, ncores);
   } else {
     switch(xpBM->matrix_type()) {
-    case 6:
-    {
-      SubBMAcc<float> macc(xpBM, rowInd, colInd, 1);
-      return clumping_chr0(BM2, macc, rowInd, colInd, ordInd, rankInd, pos, sumX, denoX, size, thr, ncores);
-    }
-    default:
-      throw Rcpp::exception(ERROR_TYPE);
-    }
+      case 6:
+      {
+        SubBMAcc<float> macc(xpBM, rowInd, colInd, 1);
+        return clumping_chr0(BM2, macc, rowInd, colInd, ordInd, rankInd, pos, sumX, denoX, size, thr, ncores);
+      }
+      default:
+        throw Rcpp::exception(ERROR_TYPE);
+      }
   }     
 }
 
